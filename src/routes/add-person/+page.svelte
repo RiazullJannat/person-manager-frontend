@@ -1,13 +1,15 @@
 <script>
-    // form state variables
+    import Swal from "sweetalert2";
+    import { goto } from "$app/navigation";
+
     let name = "";
     let email = "";
 
     async function handleSubmit(event) {
-        event.preventDefault(); // prevent default form submission
+        event.preventDefault();
 
         const person = { name, email };
-        console.log(person);
+
         try {
             const res = await fetch("http://localhost:3000/add-person", {
                 method: "POST",
@@ -20,15 +22,34 @@
             const data = await res.json();
 
             if (res.ok) {
-                alert("Person created successfully!");
+                await Swal.fire({
+                    icon: "success",
+                    title: "Success!",
+                    text: "Person created successfully.",
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+
+                // Clear form fields
                 name = "";
                 email = "";
+
+                // Redirect to home page
+                // goto("/");
             } else {
-                alert("Error: " + (data.message || "Something went wrong."));
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: data.message || "Something went wrong.",
+                });
             }
         } catch (error) {
             console.error("Error:", error);
-            alert("Failed to create person. Server error.");
+            Swal.fire({
+                icon: "error",
+                title: "Server Error!",
+                text: "Failed to create person.",
+            });
         }
     }
 </script>
