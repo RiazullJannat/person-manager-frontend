@@ -6,7 +6,7 @@
     let error = null;
     onMount(async () => {
         try {
-            const res = await fetch("http://localhost:3000/all-persons");
+            const res = await fetch("https://person-manager-backend-ten.vercel.app/all-persons");
             if (!res.ok) throw new Error("failed to fetch data.");
             persons = await res.json();
         } catch (err) {

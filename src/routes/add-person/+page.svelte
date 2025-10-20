@@ -4,14 +4,16 @@
 
     let name = "";
     let email = "";
+    let age = "";
+    let address = "";
 
     async function handleSubmit(event) {
         event.preventDefault();
 
-        const person = { name, email };
+        const person = { name, email, age, address };
 
         try {
-            const res = await fetch("http://localhost:3000/add-person", {
+            const res = await fetch("https://person-manager-backend-ten.vercel.app/add-person", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -30,11 +32,13 @@
                     showConfirmButton: false,
                 });
 
-                // Clear form fields
+                // Clear form
                 name = "";
                 email = "";
+                age = "";
+                address = "";
 
-                // Redirect to home page
+                // Optional redirect
                 // goto("/");
             } else {
                 Swal.fire({
@@ -52,38 +56,74 @@
             });
         }
     }
+
+    function handleCancel() {
+        // Just clear the form
+        name = "";
+        email = "";
+        age = "";
+        address = "";
+    }
 </script>
 
-<h1 class="text-center text-2xl">Add person form below</h1>
-<div class="hero bg-base-200 min-h-screen">
-    <div class="hero-content flex-col lg:flex-row-reverse">
-        <div class="text-center lg:text-left">
-            <h1 class="text-5xl font-bold">Create a person now!</h1>
+<!-- Form container -->
+<div class="flex justify-center items-center min-h-screen bg-gray-900">
+    <form
+        on:submit={handleSubmit}
+        class="bg-gray-800 text-white p-8 rounded-lg shadow-md w-full max-w-md space-y-4"
+    >
+        <h2 class="text-2xl font-bold">Create New Person</h2>
+
+        <div>
+            <label class="block text-sm mb-1">Name *</label>
+            <input
+                type="text"
+                bind:value={name}
+                required
+                placeholder="Full name"
+                class="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring focus:border-blue-400"
+            />
         </div>
-        <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-            <form class="card-body" on:submit={handleSubmit}>
-                <fieldset class="fieldset">
-                    <label class="label">Name</label>
-                    <input
-                        class="input"
-                        bind:value={name}
-                        type="text"
-                        placeholder="Name"
-                        required
-                    />
-                    <label class="label">Email</label>
-                    <input
-                        class="input"
-                        bind:value={email}
-                        type="email"
-                        placeholder="Email"
-                        required
-                    />
-                    <button type="submit" class="btn btn-neutral mt-4">
-                        Create
-                    </button>
-                </fieldset>
-            </form>
+
+        <div>
+            <label class="block text-sm mb-1">Email *</label>
+            <input
+                type="email"
+                bind:value={email}
+                required
+                placeholder="Email"
+                class="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring focus:border-blue-400"
+            />
         </div>
-    </div>
+
+        <div>
+            <label class="block text-sm mb-1">Age *</label>
+            <input
+                type="number"
+                bind:value={age}
+                required
+                placeholder="Age"
+                class="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring focus:border-blue-400"
+            />
+        </div>
+
+        <div>
+            <label class="block text-sm mb-1">Address *</label>
+            <textarea
+                bind:value={address}
+                required
+                placeholder="Full address"
+                class="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring focus:border-blue-400"
+            ></textarea>
+        </div>
+
+        <div class="flex justify-start space-x-4 pt-2">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                Create Person
+            </button>
+            <button type="button" on:click={handleCancel} class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+                Cancel
+            </button>
+        </div>
+    </form>
 </div>
